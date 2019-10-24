@@ -4,7 +4,7 @@ import time
 
 link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/studyguide-for-counter-hack-reloaded_205/"
 
-def test_allert_should_be_after_add_product(browser):
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page = ProductPage(browser, link)  # инициализируем Page Object, передаем в конструктор экземпляр драйвера и url адрес
     page.open()  # открываем страницу
     page.add_to_cart(True)  # жмем кнопку добавить в корзину

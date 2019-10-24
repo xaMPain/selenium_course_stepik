@@ -1,29 +1,64 @@
+from pages.login_page import LoginPage
 from .pages.product_page import ProductPage
+from .pages.basket_page import BasketPage
+from .pages.main_page import MainPage
+
 import pytest
 
 
-@pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9",
-                                  pytest.param("bugged_link", marks=pytest.mark.xfail),
-                                  "okay_link"])
+@pytest.mark.need_review
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser,link):
+        self.product = ProductFactory(title="Best book created by robot")
+        # создаем по апи
+        self.link = self.product.link
+        yield
+        # после этого ключевого слова начинается teardown
+        # выполнится после каждого теста в классе
+        # удаляем те данные, которые мы создали
+        self.product.delete()
 
-def test_guest_can_add_product_to_basket(browser, link):
-    page = ProductPage(browser, link)   # инициализируем Page Object, передаем в конструктор экземпляр драйвера и url адрес
-    page.open()                      # открываем страницу
-    page.should_be_add_to_cart_button()  # проверяем что есть кнопка добавления в корзину
-    page.add_product_to_cart()  # жмем кнопку добавить в корзину
-    page.solve_quiz_and_get_code()  # решаем задание и вносим ответ
-    page.should_be_same_product()  # проверяем и запоминаем имя продукта
-    page.should_be_same_price()  # проверям и запоминаем цену продукта
-    page.should_be_success_message()  # проверяем что есть сообщение с нужным текстом
-    page.should_item_in_basket()  # проверяем товар в корзине
+    def test_user_can_add_product_to_cart(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/neuromancer_13/"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_to_cart(True)
+        page.should_be_present_in_cart()
+        page.should_check_overall_cost()
+
+    def test_user_cant_see_product_in_basket_opened_from_product_page(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/hacking-exposed-wireless_208/"
+        page = BasketPage(browser, link)
+        page.open()
+        page.go_to_basket_page()
+        page.should_not_be_present_in_cart()
+        page.should_be_message_in_cart_about_no_items()
 
 
+@pytest.mark.need_review
+class TestGuestAddToBasketFromProductPage():
+    def test_guest_can_add_product_to_cart(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/neuromancer_13/"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_to_cart(True)
+        page.should_be_present_in_cart()
+        page.should_check_overall_cost()
+
+    def test_guest_cant_see_product_in_basket_opened_from_product_page(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/hacking-exposed-wireless_208/"
+        page = BasketPage(browser, link)
+        page.open()
+        page.go_to_basket_page()
+        page.should_not_be_present_in_cart()
+        page.should_be_message_in_cart_about_no_items()
+
+
+@pytest.mark.need_review
+class TestUserCanGoToLoginPageFromMainPage():
+    def test_guest_can_go_to_login_page(self, browser):
+        link = "http://selenium1py.pythonanywhere.com"
+        page = MainPage(browser, link)
+        page.open()  # открываем страницу
+        page.go_to_login_page()
