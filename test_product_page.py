@@ -1,28 +1,29 @@
-from pages.login_page import LoginPage
+from .pages.login_page import LoginPage
 from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
 from .pages.main_page import MainPage
 
 import pytest
+import time
 
 
 @pytest.mark.need_review
 class TestUserAddToBasketFromProductPage():
     @pytest.fixture(scope="function", autouse=True)
-    def setup(self, browser,link):
-        self.product = ProductFactory(title="Best book created by robot")
-        # создаем по апи
-        self.link = self.product.link
+    def setup(self, browser):
+        self.browser = browser
+        link = "http://selenium1py.pythonanywhere.com"
+        page = LoginPage(browser, link)
+        page.open()
+        page.register_new_user()
+        time.sleep(5)
         yield
-        # после этого ключевого слова начинается teardown
-        # выполнится после каждого теста в классе
-        # удаляем те данные, которые мы создали
-        self.product.delete()
 
     def test_user_can_add_product_to_cart(self, browser):
         link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/neuromancer_13/"
         page = ProductPage(browser, link)
         page.open()
+        page.should_be_authorized_user()
         page.add_to_cart(True)
         page.should_be_present_in_cart()
         page.should_check_overall_cost()
@@ -31,6 +32,7 @@ class TestUserAddToBasketFromProductPage():
         link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/hacking-exposed-wireless_208/"
         page = BasketPage(browser, link)
         page.open()
+        page.should_be_authorized_user()
         page.go_to_basket_page()
         page.should_not_be_present_in_cart()
         page.should_be_message_in_cart_about_no_items()

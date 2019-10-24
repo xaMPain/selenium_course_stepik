@@ -28,7 +28,8 @@ class LoginPage(BasePage):
         login = self.browser.find_element(*LoginPageLocators.LOGIN_FORM)
         login.send_keys(email)
         password = self.browser.find_element(*LoginPageLocators.PASSWORD_FORM)
-        password.send_keys("123456")
+        password.send_keys("VfrcItbyG570")
         password = self.browser.find_element(*LoginPageLocators.PASSWORD_CHEK)
-        password.send_keys("123456")
-        self.browser.find_element(LoginPageLocators.REGISTER_BTN).click()
+        password.send_keys("VfrcItbyG570")
+        self.browser.find_element(*LoginPageLocators.REGISTER_BTN).click()
+

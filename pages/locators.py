@@ -15,7 +15,7 @@ class MainPageLocators:
 
 
 class LoginPageLocators:
-    LOGIN_FORM = (By.ID, "login_form")
+    LOGIN_FORM = (By.CSS_SELECTOR, "#id_registration-email")
     PASSWORD_FORM = (By.CSS_SELECTOR, "#id_registration-password1")
     PASSWORD_CHEK = (By.CSS_SELECTOR, "#id_registration-password2")
     REGISTER_FORM = (By.ID, "register_form")
