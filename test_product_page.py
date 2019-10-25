@@ -11,7 +11,6 @@ import time
 class TestUserAddToBasketFromProductPage():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
-        self.browser = browser
         link = "http://selenium1py.pythonanywhere.com"
         page = LoginPage(browser, link)
         page.open()
