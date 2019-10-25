@@ -7,7 +7,7 @@ import pytest
 import time
 
 
-@pytest.mark.need_review
+
 class TestUserAddToBasketFromProductPage():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
@@ -17,6 +17,7 @@ class TestUserAddToBasketFromProductPage():
         page.open()
         page.register_new_user()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_cart(self, browser):
         link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/neuromancer_13/"
         page = ProductPage(browser, link)
@@ -36,8 +37,8 @@ class TestUserAddToBasketFromProductPage():
         page.should_be_message_in_cart_about_no_items()
 
 
-@pytest.mark.need_review
 class TestGuestAddToBasketFromProductPage():
+    @pytest.mark.need_review
     def test_guest_can_add_product_to_cart(self, browser):
         link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/neuromancer_13/"
         page = ProductPage(browser, link)
@@ -46,6 +47,7 @@ class TestGuestAddToBasketFromProductPage():
         page.should_be_present_in_cart()
         page.should_check_overall_cost()
 
+    @pytest.mark.need_review
     def test_guest_cant_see_product_in_basket_opened_from_product_page(self, browser):
         link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/hacking-exposed-wireless_208/"
         page = BasketPage(browser, link)
@@ -55,8 +57,8 @@ class TestGuestAddToBasketFromProductPage():
         page.should_be_message_in_cart_about_no_items()
 
 
-@pytest.mark.need_review
 class TestUserCanGoToLoginPageFromMainPage():
+    @pytest.mark.need_review
     def test_guest_can_go_to_login_page(self, browser):
         link = "http://selenium1py.pythonanywhere.com"
         page = MainPage(browser, link)
