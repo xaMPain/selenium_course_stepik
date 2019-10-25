@@ -16,8 +16,6 @@ class TestUserAddToBasketFromProductPage():
         page = LoginPage(browser, link)
         page.open()
         page.register_new_user()
-        time.sleep(5)
-        yield
 
     def test_user_can_add_product_to_cart(self, browser):
         link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/neuromancer_13/"
